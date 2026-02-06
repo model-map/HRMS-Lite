@@ -19,7 +19,11 @@ export default function Employees() {
   const employeeId = params.employeeId;
 
   if (!attendances) {
-    return <Spinner />;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   const employeeRecord = attendances.find((c) => c.employee._id === employeeId);
@@ -36,7 +40,7 @@ export default function Employees() {
         </div>
 
         <Separator className="mb-6" />
-        <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center">
           <Spinner />
         </div>
       </div>
@@ -57,7 +61,8 @@ export default function Employees() {
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">
-            Employee - {employeeRecord?.employee.name}
+            <p>Employee Name - {employeeRecord?.employee.name}</p>
+            <p>Employee ID - {employeeRecord?.employee._id}</p>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -51,13 +51,19 @@ export const markAttendance = TryCatch(async (req: Request, res: Response) => {
     });
   } else {
     // If record already exists then find by id and update
-    attendance = await Attendance.findByIdAndUpdate(
-      attendanceOnDate._id,
-      { status },
-      { new: true },
-    );
+    // attendance = await Attendance.findByIdAndUpdate(
+    //   attendanceOnDate._id,
+    //   { status },
+    //   { new: true },
+    // );
+    res.status(409).json({
+      message: "Attendance has already been marked on the specified date",
+      employee,
+      attendance,
+    });
   }
   res.json({
+    message: `Successfully marked attendance`,
     employee,
     attendance,
   });
@@ -108,12 +114,10 @@ export const updateAttendance = TryCatch(
     }
 
     if (attendance.status === status) {
-      return res
-        .status(409)
-        .json({
-          message: `Attendance is already marked as ${status}`,
-          attendance,
-        });
+      return res.status(409).json({
+        message: `Attendance is already marked as ${status}`,
+        attendance,
+      });
     }
 
     // Update status
