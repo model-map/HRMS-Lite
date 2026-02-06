@@ -80,3 +80,48 @@ export const getAttendance = TryCatch(async (req: Request, res: Response) => {
     attendances,
   });
 });
+
+// CONTROLLER TO UPDATE EMPLOYEE'S ATTENDANCE
+export const updateAttendance = TryCatch(
+  async (req: Request, res: Response) => {
+    const attendanceId = req.params.attendanceId;
+    const status = req.body.status.trim();
+
+    if (!attendanceId) {
+      return res.status(400).json({
+        message: `Failed to update attendance - no attendance found with the provided ID.`,
+      });
+    }
+
+    // Check if status is either 'Present' or 'Absent'
+    if (!CONSTANTS_ATTENDANCE_STATUS.includes(status)) {
+      return res.status(400).json({
+        message: `Failed to update attendance - Invalid attendance status. Must be either of ${CONSTANTS_ATTENDANCE_STATUS}`,
+      });
+    }
+
+    //   Get attendance
+    const attendance = await Attendance.findOne({ _id: attendanceId });
+
+    if (!attendance) {
+      return res.status(404).json({ message: "Attendance not found." });
+    }
+
+    if (attendance.status === status) {
+      return res
+        .status(409)
+        .json({
+          message: `Attendance is already marked as ${status}`,
+          attendance,
+        });
+    }
+
+    // Update status
+    attendance.status = status;
+    await attendance.save();
+
+    return res
+      .status(200)
+      .json({ message: "Attendance updated successfully.", attendance });
+  },
+);
