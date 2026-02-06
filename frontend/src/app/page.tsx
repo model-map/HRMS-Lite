@@ -1,8 +1,13 @@
 import log from "loglevel";
+import Employees from "./employees/page";
 
 log.setLevel(process.env.NODE_ENV === "production" ? "warn" : "trace");
 log.info("In Home Page");
 
 export default function Home() {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Employees />
+    </div>
+  );
 }
