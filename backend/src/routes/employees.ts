@@ -1,7 +1,8 @@
 import { Router } from "express";
+import { addEmployee } from "../controller/employees.js";
 
 const router = Router();
 
-router.get("/", (req, res) => res.json({ message: "Employees endpoint" }));
+router.post("/add", addEmployee);
 
 export default router;
