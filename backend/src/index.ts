@@ -2,6 +2,8 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import connectDb from "./config/db.js";
+import employeesRouter from "./routes/employees.js";
+import attendanceRouter from "./routes/attendance.js";
 dotenv.config();
 
 const app = express();
@@ -17,6 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 connectDb();
 
 app.get("/", (req, res) => res.json({ message: "Hello world" }));
+
+// OTHER ROUTES
+app.use("/api/v1/employees", employeesRouter);
+app.use("/api/v1/attendance", attendanceRouter);
 
 // 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
