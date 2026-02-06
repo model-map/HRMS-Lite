@@ -60,3 +60,27 @@ export const getAllEmployees = TryCatch(async (req: Request, res: Response) => {
   const employees = await Employee.find().sort({ createdAt: 1 });
   res.json({ employees });
 });
+
+// CONTROLLER TO DELETE AN EMPLOYEE
+export const deleteEmployee = TryCatch(async (req: Request, res: Response) => {
+  const employeeId = req.body?.employeeId?.trim() || null;
+  // Check if employeeId is provided
+  if (!employeeId) {
+    return res.status(400).json({
+      message: `Failed to delete employee - no employeeId provided`,
+    });
+  }
+
+  // Find employee with provided employee id and delete
+  const employee = await Employee.findByIdAndDelete({ _id: employeeId }); //Returns either deleted document or null
+  // If there was no employee with provided id
+  if (!employee) {
+    return res.status(400).json({
+      message: "Failed to delete employee - No such employee exists.",
+    });
+  }
+  return res.json({
+    message: `Successfully deleted employee`,
+    employee,
+  });
+});
