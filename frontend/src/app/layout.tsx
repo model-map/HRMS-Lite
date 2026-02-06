@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/context/theme-provider";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Toaster } from "sonner";
 import { AppProvider } from "@/context/AppContext";
+import Navbar from "@/components/blocks/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Toaster position="top-center" />
-          <ModeToggle />
+          <Navbar />
           <AppProvider>{children}</AppProvider>
         </ThemeProvider>
       </body>
