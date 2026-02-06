@@ -37,7 +37,7 @@ export default function EmployeeAttendanceChart() {
   // Map data for chart
   const chartData = attendances.map((record) => ({
     employee: record.employee.name,
-    attendance: record.attendances.length,
+    attendance: record.attendances.filter((a) => a.status === "Present").length,
   }));
 
   const chartConfig = {
@@ -62,14 +62,16 @@ export default function EmployeeAttendanceChart() {
             margin={{
               left: 12,
               right: 12,
+              top: 20,
+              bottom: 20,
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={true} />
             <XAxis
               dataKey="employee"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
+              tickLine={true}
+              axisLine={true}
+              tickMargin={10}
               padding={{ left: 20, right: 20 }}
               tickFormatter={(value) => value} // employee name
             />
