@@ -1,14 +1,60 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { IEmployee, useAppData } from "@/context/AppContext";
+import axios from "axios";
 import { Badge, Building2, User } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const EmployeeCard = ({ employee }: { employee: IEmployee }) => {
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+  const { setEmployees } = useAppData() as {
+    setEmployees: React.Dispatch<React.SetStateAction<IEmployee[]>>;
+  };
+  const router = useRouter();
+
+  const handleDelete = async (employeeId: string) => {
+    try {
+      setDeleteLoading(true);
+      const { data } = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/api/v1/employees/delete`,
+        {
+          data: { employeeId },
+        },
+      );
+      toast.success(data.message);
+      //   REMOVE USER FROM employees
+      const deletedEmployee: IEmployee = data.employee;
+      setEmployees((prev) =>
+        prev ? prev.filter((e) => e._id !== deletedEmployee._id) : prev,
+      );
+      router.push("/employees");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const message =
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to delete employee - Unexpected error occured. Please try again later.";
+        toast.error(message);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error(
+          "Failed to delete employee - Unexpected error occured. Please try again later.",
+        );
+      }
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   return (
     <Card className="relative max-w-xl overflow-hidden">
       {/* subtle top accent */}
@@ -55,6 +101,16 @@ const EmployeeCard = ({ employee }: { employee: IEmployee }) => {
             </p>
           </div>
         </div>
+        <Separator />
+        <Button
+          variant="destructive"
+          className="w-full hover:cursor-pointer"
+          onClick={() => handleDelete(employee._id)}
+          disabled={deleteLoading}
+        >
+          {deleteLoading && <Spinner />}
+          {!deleteLoading && <>Delete Employee</>}
+        </Button>
       </CardContent>
     </Card>
   );
@@ -88,10 +144,10 @@ export default function Employee() {
     );
   }
 
-  if (!employee) {
+  if (!loading && !employee) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center text-sm text-muted-foreground">
-        Internal Server Error. Please try again later.
+        No such employee exists.
       </div>
     );
   }

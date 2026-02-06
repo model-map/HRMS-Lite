@@ -58,7 +58,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     fetchEmployees();
   }, []);
 
-  return <AppContext value={{ employees, loading }}>{children}</AppContext>;
+  return (
+    <AppContext value={{ employees, setEmployees, loading }}>
+      {children}
+    </AppContext>
+  );
 };
 
 export const useAppData = (): AppContextType => {
