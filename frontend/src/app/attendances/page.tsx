@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -56,15 +56,9 @@ export default function EmployeeAttendanceChart() {
 
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
+          <BarChart
             data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-              top: 20,
-              bottom: 20,
-            }}
+            margin={{ left: 20, right: 20, top: 20, bottom: 20 }}
           >
             <CartesianGrid vertical={true} />
             <XAxis
@@ -73,20 +67,20 @@ export default function EmployeeAttendanceChart() {
               axisLine={true}
               tickMargin={10}
               padding={{ left: 20, right: 20 }}
-              tickFormatter={(value) => value} // employee name
+              tickFormatter={(value) => value}
             />
+            <YAxis />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Line
+            <Bar
               dataKey="attendance"
-              type="natural"
-              stroke="var(--color-attendance, #3b82f6)"
-              strokeWidth={2}
-              dot={true}
+              fill="var(--color-attendance, #3b82f6)"
+              barSize={40}
+              radius={[4, 4, 0, 0]}
             />
-          </LineChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
 
