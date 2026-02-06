@@ -4,6 +4,7 @@ import { ModeToggle } from "../ui/mode-toggle";
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Employees", href: "/employees" },
+  { label: "Attendances", href: "/attendances" },
 ];
 
 const Navbar = () => {

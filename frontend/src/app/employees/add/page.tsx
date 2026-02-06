@@ -39,7 +39,7 @@ export default function AddEmployee() {
     email: "",
     department: CONSTANTS_DEPARTMENTS[0],
   });
-  const [loading, setLoading] = useState(false);
+  const [employeeLoading, setEmployeeLoading] = useState(false);
   const { setEmployees } = useAppData() as {
     setEmployees: React.Dispatch<React.SetStateAction<IEmployee[]>>;
   };
@@ -52,7 +52,7 @@ export default function AddEmployee() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    setEmployeeLoading(true);
 
     try {
       const { data } = await axios.post(
@@ -72,7 +72,7 @@ export default function AddEmployee() {
         toast.error("Unknown error");
       }
     } finally {
-      setLoading(false);
+      setEmployeeLoading(false);
     }
   };
 
@@ -148,8 +148,12 @@ export default function AddEmployee() {
           </CardContent>
 
           <CardFooter className="pt-0">
-            <Button type="submit" className="w-full gap-2" disabled={loading}>
-              {loading ? (
+            <Button
+              type="submit"
+              className="w-full gap-2"
+              disabled={employeeLoading}
+            >
+              {employeeLoading ? (
                 <Spinner />
               ) : (
                 <>

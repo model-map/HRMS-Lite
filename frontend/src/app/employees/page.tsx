@@ -57,12 +57,12 @@ const EmployeesTable = ({ employees }: { employees: IEmployee[] }) => {
 };
 
 export default function Employees() {
-  const { loading, employees } = useAppData() as {
-    loading: boolean;
+  const { employeeLoading, employees } = useAppData() as {
+    employeeLoading: boolean;
     employees: IEmployee[];
   };
 
-  if (loading) {
+  if (employeeLoading) {
     return (
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-6">

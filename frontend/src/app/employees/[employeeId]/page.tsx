@@ -119,14 +119,14 @@ const EmployeeCard = ({ employee }: { employee: IEmployee }) => {
 export default function Employee() {
   const { employeeId } = useParams<{ employeeId: string }>();
 
-  const { loading, employees } = useAppData() as {
-    loading: boolean;
+  const { employeeLoading, employees } = useAppData() as {
+    employeeLoading: boolean;
     employees: IEmployee[];
   };
 
   const employee = employees?.find((c) => c._id === employeeId) || null;
 
-  if (loading) {
+  if (employeeLoading) {
     return (
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-6">
@@ -144,7 +144,7 @@ export default function Employee() {
     );
   }
 
-  if (!loading && !employee) {
+  if (!employeeLoading && !employee) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center text-sm text-muted-foreground">
         No such employee exists.
