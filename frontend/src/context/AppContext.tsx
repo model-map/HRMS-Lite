@@ -14,7 +14,7 @@ export interface IEmployee {
   updatedAt: Date;
 }
 
-type AttendanceProp = {
+export type AttendanceProp = {
   _id: string;
   employeeId: string;
   date: Date;

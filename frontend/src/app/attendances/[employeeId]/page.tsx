@@ -1,27 +1,37 @@
 "use client";
 
 import { Spinner } from "@/components/ui/spinner";
-import { IEmployee, useAppData } from "@/context/AppContext";
-
+import { IAttendance, useAppData } from "@/context/AppContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import EmployeesTable from "./EmployeesTable";
+import AttendanceTable from "./AttendanceTable";
+import { useParams } from "next/navigation";
 
 export default function Employees() {
-  const { employeeLoading, employees } = useAppData() as {
-    employeeLoading: boolean;
-    employees: IEmployee[];
+  const { attendanceLoading, attendances } = useAppData() as {
+    attendanceLoading: boolean;
+    attendances: IAttendance[];
   };
 
-  if (employeeLoading) {
+  const params = useParams();
+  const employeeId = params.employeeId;
+
+  if (!attendances) {
+    return <Spinner />;
+  }
+
+  const employeeRecord = attendances.find((c) => c.employee._id === employeeId);
+  const employeeAttendances = employeeRecord?.attendances ?? [];
+
+  if (attendanceLoading) {
     return (
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-6">
           <h1 className="text-3xl font-semibold">Employees</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Manage and review all registered employees.
+            Manage and review all registered attendances.
           </p>
         </div>
 
@@ -36,9 +46,9 @@ export default function Employees() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-semibold">Employees</h1>
+        <h1 className="text-3xl font-semibold">Employee Attendance</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Manage and review all registered employees.
+          Manage and review an employee attendance.
         </p>
       </div>
 
@@ -46,15 +56,17 @@ export default function Employees() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Employee List</CardTitle>
+          <CardTitle className="text-lg">Employee</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {employees.length === 0 && (
-            <div>No Employees found. Please add an employee.</div>
+          {employeeAttendances.length === 0 && (
+            <div>No Attendance Records Found. Please mark an attendance.</div>
           )}
-          {employees.length > 0 && <EmployeesTable employees={employees} />}
+          {employeeAttendances.length > 0 && (
+            <AttendanceTable attendances={employeeAttendances} />
+          )}
           <Button variant="default">
-            <Link href="/employees/add">Add Employee</Link>
+            <Link href={`/attendances/${employeeId}/add`}>Mark Attendance</Link>
           </Button>
         </CardContent>
       </Card>
