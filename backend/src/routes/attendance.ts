@@ -1,7 +1,8 @@
 import { Router } from "express";
+import { getAttendance } from "../controller/attendance.js";
 
 const router = Router();
 
-router.get("/", (req, res) => res.json({ message: "Attendance endpoint" }));
+router.get("/:employeeId", getAttendance);
 
 export default router;
