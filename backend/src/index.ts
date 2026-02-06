@@ -4,6 +4,7 @@ import path from "path";
 import connectDb from "./config/db.js";
 import employeesRouter from "./routes/employees.js";
 import attendanceRouter from "./routes/attendance.js";
+import cors from "cors";
 dotenv.config();
 
 const app = express();
@@ -14,6 +15,9 @@ app.use(express.static(path.resolve(process.cwd(), "dist/public")));
 // Global middleware for body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Global middleware for cors
+app.use(cors());
 
 // Connect to DB
 connectDb();

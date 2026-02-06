@@ -54,3 +54,9 @@ export const addEmployee = TryCatch(async (req: Request, res: Response) => {
     employee: newEmployee,
   });
 });
+
+// CONTROLLER TO GET ALL EMPLOYEES
+export const getAllEmployees = TryCatch(async (req: Request, res: Response) => {
+  const employees = await Employee.find().sort({ createdAt: 1 });
+  res.json({ employees });
+});
