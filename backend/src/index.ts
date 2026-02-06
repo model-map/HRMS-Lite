@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
+import connectDb from "./config/db.js";
 dotenv.config();
 
 const app = express();
@@ -11,6 +12,9 @@ app.use(express.static(path.resolve(process.cwd(), "dist/public")));
 // Global middleware for body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Connect to DB
+connectDb();
 
 app.get("/", (req, res) => res.json({ message: "Hello world" }));
 
