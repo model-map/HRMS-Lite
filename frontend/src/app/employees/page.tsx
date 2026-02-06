@@ -80,14 +80,6 @@ export default function Employees() {
     );
   }
 
-  if (!employees) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center text-sm text-muted-foreground">
-        Internal Server Error. Please try again later.
-      </div>
-    );
-  }
-
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
       <div className="mb-6">
@@ -103,8 +95,14 @@ export default function Employees() {
         <CardHeader>
           <CardTitle className="text-lg">Employee List</CardTitle>
         </CardHeader>
-        <CardContent>
-          <EmployeesTable employees={employees} />
+        <CardContent className="space-y-4">
+          {employees.length === 0 && (
+            <div>No Employees found. Please add an employee.</div>
+          )}
+          {employees.length > 0 && <EmployeesTable employees={employees} />}
+          <Button variant="default">
+            <Link href="/employees/add">Add Employee</Link>
+          </Button>
         </CardContent>
       </Card>
     </div>
